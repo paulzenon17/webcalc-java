@@ -4,14 +4,12 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout code from Git repository
                 git branch: 'main', url: 'https://github.com/Sriniketh03/webcalc-java.git'
             }
         }
 
         stage('Build and Test') {
             steps {
-                // Use Maven to build and test the project
                 sh 'mvn clean test install'
             }
         }
@@ -26,28 +24,41 @@ pipeline {
 
         stage('Deploy to Tomcat') {
             steps {
-                // Copy the war file to Tomcat webapps directory
-                deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://192.168.24.153':8081/')], contextPath: null, war: '**/*.war'
+                deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://192.168.24.153:8081/')], contextPath: null, war: '**/*.war'
             }
         }
 
         stage('API Testing') {
             steps {
                 script {
-                    // Wait for Tomcat to deploy the application
-                    sleep(time: 30, unit: 'SECONDS')
+                    def timeout = 300 // Maximum timeout for waiting Tomcat deployment (in seconds)
+                    def startTime = currentTimeMillis()
 
-                    // Perform API testing for GET and POST methods
+                    // Wait until Tomcat application is accessible
+                    def tomcatAccessible = false
+                    while (!tomcatAccessible && (currentTimeMillis() - startTime) < (timeout * 1000)) {
+                        try {
+                            sh 'curl -sSf http://192.168.24.153:8081/webapp-0.2/'
+                            tomcatAccessible = true
+                        } catch (Exception e) {
+                            sleep time: 10, unit: 'SECONDS'
+                        }
+                    }
+                    if (!tomcatAccessible) {
+                        error 'Tomcat deployment timeout'
+                    }
+
+                    // Perform API testing and assertions
                     def getResponse = sh(script: 'curl -X GET http://192.168.138.114:8081/webapp-0.2/', returnStdout: true).trim()
                     def postResponse = sh(script: 'curl -X POST -d "n1=5&n2=6&r1=add" http://192.168.138.114:8081/webapp-0.2/firstHomePage', returnStdout: true).trim()
 
-                    // Print the responses
+                    // Assert responses
+                    assert getResponse.contains("ExpectedText")
+                    assert postResponse.contains("ExpectedText")
+
+                    // Print responses
                     echo "GET Response: ${getResponse}"
                     echo "POST Response: ${postResponse}"
-
-                    // Add additional checks/assertions based on the expected responses
-                    // Example: assert getResponse.contains("ExpectedText")
-                    // Example: assert postResponse.contains("ExpectedText")
                 }
             }
         }
@@ -55,12 +66,12 @@ pipeline {
 
     post {
         success {
-            // Notify success, send emails, or perform other post-build actions
             echo 'Deployment successful!'
+            // Notify success, send emails, etc.
         }
         failure {
-            // Notify failure, send emails, or perform other post-build actions
             echo 'Deployment failed!'
+            // Notify failure, send emails, etc.
         }
     }
 }
