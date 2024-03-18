@@ -49,8 +49,8 @@ pipeline {
                     }
 
                     // Perform API testing and assertions
-                    def getResponse = sh(script: 'curl -X GET http://192.168.138.114:8081/webapp-0.2/', returnStdout: true).trim()
-                    def postResponse = sh(script: 'curl -X POST -d "n1=5&n2=6&r1=add" http://192.168.138.114:8081/webapp-0.2/firstHomePage', returnStdout: true).trim()
+                    def getResponse = sh(script: 'curl -X GET http://192.168.24.153:8081/webapp-0.2/', returnStdout: true).trim()
+                    def postResponse = sh(script: 'curl -X POST -d "n1=5&n2=6&r1=add" http://192.168.24.153:8081/webapp-0.2/firstHomePage', returnStdout: true).trim()
 
                     // Assert responses
                     assert getResponse.contains("ExpectedText")
