@@ -27,7 +27,7 @@ public class Calculator extends HttpServlet {
         // Update with your database connection details
         String jdbcUrl = "jdbc:mysql://192.168.24.153:3306/myDB";
         String jdbcUser = "mysql";
-        String jdbcPassword = "mysql";
+        String jdbcPassword = "mysql@123";
 
         // Register the JDBC driver (you might not need this if using JDBC 4.0+)
         try {
