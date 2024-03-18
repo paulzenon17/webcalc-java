@@ -261,7 +261,7 @@ Click on Create to create the Token.
 ![image](https://github.com/beeru405/webcalc-java/assets/101712802/62662133-e251-4b20-a544-f9ceaebb94c2)
 
 
-Now set up the SonarQube tool in the ManageJenkins -> Tools section and provide the SonarQube Url and Authentication token ID that we just created in jenkins Global Credentials.
+Now set up the SonarQube tool in the ManageJenkins -> system section and provide the SonarQube Url and Authentication token ID that we just created in jenkins Global Credentials.
 
 ![image](https://github.com/beeru405/webcalc-java/assets/101712802/23650527-097e-4838-8cc4-8497f7b7169c)
 
