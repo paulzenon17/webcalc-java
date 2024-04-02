@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Sriniketh03/webcalc-java.git'
+                git branch: 'main', url: 'https://github.com/Vinays25/webcalc-java.git'
             }
         }
 
@@ -18,7 +18,7 @@ pipeline {
 
         stage('Deploy to Tomcat') {
             steps {
-                deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://192.168.24.153:8081/')], contextPath: null, war: '**/*.war'
+                deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://192.168.101.129:8081/')], contextPath: null, war: '**/*.war'
             }
         }
 
