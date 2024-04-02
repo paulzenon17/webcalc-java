@@ -14,7 +14,7 @@ public class CalculatorTest {
 
     @Test
     public void threeMinusTwoIsOne() throws Exception {
-        final long result = new Calculator().subFucn(2, 3);
+        final long result = new Calculator().subFucn(3, 2);
         assertThat(result, is(1L));
         // assertThat(result, is(2L));
     }
